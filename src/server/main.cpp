@@ -1,9 +1,10 @@
 #include "chatserver.hpp"
+#include "chatservice.hpp"
 #include <iostream>
 #include <signal.h>
-#include "chatservice.hpp"
 using namespace std;
 
+// 处理服务器ctrl+c结束后，重置user的状态信息
 void resetHandler(int)
 {
     ChatService::instance()->reset();

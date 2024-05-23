@@ -3,32 +3,31 @@
 
 #include <string>
 using namespace std;
+
 // User表的ORM类
 class User
 {
 public:
-    User(int id = 1, string name = "", string pwd = "", string state = "offline")
+    User(int id = -1, string name = "", string pwd = "", string state = "offline")
+    :id_(id),name_(name),password_(pwd),state_(state)
     {
-        this->id = id;
-        this->name = name;
-        this->password = password;
-        this->state = state;
     }
 
-    void setId(int id) { this->id = id; }
-    void setName(string name) { this->name = name; }
-    void setPwd(string pwd) { this->password = pwd; }
-    void setState(string state) { this->state = state; }
+    void setId(int id) { id_ = id; }
+    void setName(string name) { name_ = name; }
+    void setPwd(string pwd) { password_ = pwd; }
+    void setState(string state) { state_ = state; }
 
-    int  getId() { return this->id; }
-    string getName() { return this->name; }
-    string getPwd() { return this->password; }
-    string getState() { return this->state; }
+    int getId() { return id_; }
+    string getName() { return name_; }
+    string getPwd() { return password_; }
+    string getState() { return state_; }
 
-private:
-    int id;
-    string name;
-    string password;
-    string state;
+protected:
+    int id_;
+    string name_;
+    string password_;
+    string state_;
 };
+
 #endif

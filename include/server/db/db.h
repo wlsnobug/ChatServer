@@ -23,7 +23,10 @@ public:
     MYSQL *getConnection();
 
 private:
-    MYSQL *_conn;
+    MYSQL *conn_;
 };
+
+
+
 
 #endif

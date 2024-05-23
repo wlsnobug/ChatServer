@@ -37,7 +37,6 @@ sem_t rwsem;
 // 记录登录状态
 atomic_bool g_isLoginSuccess{false};
 
-
 // 接收线程
 void readTaskHandler(int clientfd);
 // 获取系统时间（聊天信息需要添加时间信息）
@@ -278,7 +277,6 @@ void doLoginResponse(json &responsejs)
                 }
             }
         }
-
         g_isLoginSuccess = true;
     }
 }
@@ -375,13 +373,13 @@ void loginout(int, string);
 
 // 系统支持的客户端命令列表
 unordered_map<string, string> commandMap = {
-    {"help", "显示所有支持的命令,格式help"},
-    {"chat", "一对一聊天,格式chat:friendid:message"},
-    {"addfriend", "添加好友,格式addfriend:friendid"},
-    {"creategroup", "创建群组,格式creategroup:groupname:groupdesc"},
-    {"addgroup", "加入群组,格式addgroup:groupid"},
-    {"groupchat", "群聊,格式groupchat:groupid:message"},
-    {"loginout", "注销,格式loginout"}};
+    {"help", "显示所有支持的命令，格式help"},
+    {"chat", "一对一聊天，格式chat:friendid:message"},
+    {"addfriend", "添加好友，格式addfriend:friendid"},
+    {"creategroup", "创建群组，格式creategroup:groupname:groupdesc"},
+    {"addgroup", "加入群组，格式addgroup:groupid"},
+    {"groupchat", "群聊，格式groupchat:groupid:message"},
+    {"loginout", "注销，格式loginout"}};
 
 // 注册系统支持的客户端命令处理
 unordered_map<string, function<void(int, string)>> commandHandlerMap = {

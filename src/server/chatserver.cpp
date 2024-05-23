@@ -1,35 +1,40 @@
 #include "chatserver.hpp"
-#include <functional>
-#include <string>
 #include "json.hpp"
 #include "chatservice.hpp"
 
+#include <iostream>
+#include <functional>
+#include <string>
 using namespace std;
 using namespace placeholders;
 using json = nlohmann::json;
+
 // 初始化聊天服务器对象
 ChatServer::ChatServer(EventLoop *loop,
                        const InetAddress &listenAddr,
                        const string &nameArg)
-    : _server(loop, listenAddr, nameArg), _loop(loop)
+    : server_(loop, listenAddr, nameArg), loop_(loop)
 {
-    // 注册连接回调
-    _server.setConnectionCallback(bind(&ChatServer::onConnection, this, _1));
+    // 注册链接回调
+    server_.setConnectionCallback(bind(&ChatServer::onConnection, this, _1));
+
     // 注册消息回调
-    _server.setMessageCallback(bind(&ChatServer::onMessage, this, _1, _2, _3));
+    server_.setMessageCallback(bind(&ChatServer::onMessage, this, _1, _2, _3));
+
     // 设置线程数量
-    _server.setThreadNum(4);
-}
-// 启动服务
-void ChatServer::ChatServer::start()
-{
-    _server.start();
+    server_.setThreadNum(4);
 }
 
-// 上报连接相关信息的回调函数
+// 启动服务
+void ChatServer::start()
+{
+    server_.start();
+}
+
+// 上报链接相关信息的回调函数
 void ChatServer::onConnection(const TcpConnectionPtr &conn)
 {
-    // 客户端断开连接
+    // 客户端断开链接
     if (!conn->connected())
     {
         ChatService::instance()->clientCloseException(conn);
@@ -43,11 +48,15 @@ void ChatServer::onMessage(const TcpConnectionPtr &conn,
                            Timestamp time)
 {
     string buf = buffer->retrieveAllAsString();
-    // 数据反序列化
+
+    // 测试，添加json打印代码
+    cout << buf << endl;
+
+    // 数据的反序列化
     json js = json::parse(buf);
-    // 完全解耦网络模块的代码和业务模块的代码
-    // 通过js["msgid"]获取业务handler=>conn js time
+    // 达到的目的：完全解耦网络模块的代码和业务模块的代码
+    // 通过js["msgid"] 获取=》业务handler=》conn  js  time
     auto msgHandler = ChatService::instance()->getHandler(js["msgid"].get<int>());
-    //回调消息绑定好的事件处理器，来执行相应的业务
-    msgHandler(conn,js,time);
+    // 回调消息绑定好的事件处理器，来执行相应的业务处理
+    msgHandler(conn, js, time);
 }

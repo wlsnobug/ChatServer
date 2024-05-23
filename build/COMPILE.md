@@ -1,0 +1,1 @@
+执行autobuild.sh自动编译
